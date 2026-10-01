@@ -6,20 +6,22 @@
 <title>Bingo</title>
 <style>
   :root{
-    --bg:#0f1420;
-    --panel:#192133;
-    --panel2:#212c42;
-    --line:#2e3b56;
-    --txt:#eaf0ff;
-    --dim:#8fa0c4;
-    --accent:#ffd34d;
-    --ok:#36d399;
-    --hot:#ff6b6b;
+    --bg:#ffffff;
+    --panel:#ffffff;
+    --panel2:#f2f5fa;
+    --hover:#e3e9f3;
+    --line:#dde4ee;
+    --txt:#141b2b;
+    --dim:#69768f;
+    --accent:#ffcb2e;
+    --ink:#7a5600;        /* ámbar legible sobre blanco */
+    --ok:#0d9668;
+    --shadow:0 1px 2px rgba(20,27,43,.05), 0 8px 24px rgba(20,27,43,.07);
   }
   *{box-sizing:border-box}
   body{
     margin:0; padding:24px;
-    background:radial-gradient(circle at 20% 0%,#1b2740,var(--bg) 60%);
+    background:var(--bg);
     color:var(--txt);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
     min-height:100vh;
@@ -30,20 +32,20 @@
   .layout{display:grid; grid-template-columns:320px 1fr; gap:24px; align-items:start}
   @media(max-width:900px){.layout{grid-template-columns:1fr}}
 
-  .panel{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:20px}
+  .panel{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:20px; box-shadow:var(--shadow)}
 
   .ball{
     width:150px; height:150px; margin:0 auto 16px;
     border-radius:50%;
-    background:radial-gradient(circle at 32% 28%,#fff5cc,var(--accent) 55%,#c99a00);
+    background:radial-gradient(circle at 32% 28%,#fff3bf,var(--accent) 55%,#e0a800);
     display:flex; flex-direction:column; align-items:center; justify-content:center;
-    color:#2a2000; box-shadow:0 10px 30px rgba(255,211,77,.25);
+    color:#3d2b00; box-shadow:0 10px 28px rgba(224,168,0,.35);
     transition:transform .25s;
   }
   .ball.pop{transform:scale(1.12)}
-  .ball .letter{font-size:20px; font-weight:800; letter-spacing:4px; opacity:.75}
+  .ball .letter{font-size:20px; font-weight:800; letter-spacing:4px; opacity:.7}
   .ball .num{font-size:56px; font-weight:800; line-height:1}
-  .ball.empty{background:#243049; color:var(--dim); box-shadow:none}
+  .ball.empty{background:var(--panel2); color:var(--dim); box-shadow:none; border:1px solid var(--line)}
   .ball.empty .num{font-size:22px; font-weight:600}
 
   button{
@@ -51,10 +53,10 @@
     border:1px solid var(--line); background:var(--panel2); color:var(--txt);
     padding:11px 14px; transition:.15s;
   }
-  button:hover:not(:disabled){background:#2b3a58}
-  button:disabled{opacity:.4; cursor:not-allowed}
-  .btn-main{width:100%; background:var(--accent); color:#2a2000; border-color:transparent; font-size:17px; padding:14px}
-  .btn-main:hover:not(:disabled){background:#ffdd73}
+  button:hover:not(:disabled){background:var(--hover)}
+  button:disabled{opacity:.45; cursor:not-allowed}
+  .btn-main{width:100%; background:var(--accent); color:#3d2b00; border-color:transparent; font-size:17px; padding:14px}
+  .btn-main:hover:not(:disabled){background:#ffd75c}
   .row{display:flex; gap:8px; margin-top:10px}
   .row button{flex:1; font-size:13px}
 
@@ -65,11 +67,11 @@
   .history h3{font-size:12px; text-transform:uppercase; letter-spacing:1px; color:var(--dim); margin:0 0 8px}
   .chips{display:flex; flex-wrap:wrap; gap:5px; max-height:120px; overflow:auto}
   .chip{background:var(--panel2); border:1px solid var(--line); border-radius:6px; padding:3px 7px; font-size:12px; color:var(--dim)}
-  .chip.last{background:var(--accent); color:#2a2000; border-color:transparent; font-weight:700}
+  .chip.last{background:var(--accent); color:#3d2b00; border-color:transparent; font-weight:700}
 
   .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px}
-  .card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:16px}
-  .card.win{border-color:var(--ok); box-shadow:0 0 0 2px rgba(54,211,153,.25)}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:16px; box-shadow:var(--shadow)}
+  .card.win{border-color:var(--ok); box-shadow:0 0 0 2px rgba(13,150,104,.2), var(--shadow)}
   .card-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px}
   .card-head input{
     background:transparent; border:none; color:var(--txt); font:inherit; font-weight:700;
@@ -77,7 +79,7 @@
   }
   .card-head input:focus{outline:none; background:var(--panel2)}
   .status{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--dim)}
-  .status.linea{color:var(--accent)}
+  .status.linea{color:var(--ink)}
   .status.bingo{color:var(--ok)}
 
   table{width:100%; border-collapse:separate; border-spacing:4px}
@@ -87,16 +89,17 @@
     font-size:17px; font-weight:600; cursor:pointer; user-select:none;
     height:46px; transition:.12s; border:1px solid transparent;
   }
-  td:hover{background:#2b3a58}
-  td.called{border-color:var(--accent); color:var(--accent)}
-  td.marked{background:var(--accent); color:#2a2000; border-color:transparent}
-  td.free{background:#2b3a58; color:var(--dim); font-size:11px; letter-spacing:1px; cursor:default}
-  td.marked.free{background:var(--accent); color:#2a2000}
+  td:hover{background:var(--hover)}
+  td.called{border-color:var(--accent); color:var(--ink); background:#fffaeb}
+  td.marked{background:var(--accent); color:#3d2b00; border-color:transparent}
+  td.free{background:var(--hover); color:var(--dim); font-size:11px; letter-spacing:1px; cursor:default}
+  td.marked.free{background:var(--accent); color:#3d2b00}
 
   .toast{
     position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(140%);
-    background:var(--ok); color:#07301f; padding:14px 26px; border-radius:12px;
+    background:var(--ok); color:#ffffff; padding:14px 26px; border-radius:12px;
     font-weight:800; font-size:18px; transition:transform .3s; z-index:50;
+    box-shadow:0 8px 28px rgba(13,150,104,.3);
   }
   .toast.show{transform:translateX(-50%) translateY(0)}
 </style>
