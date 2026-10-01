@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*~
+
+# Dependencias y builds
+node_modules/
+dist/
+build/
+
+# Vercel
+.vercel
+
+# Variables de entorno — nunca subir secretos al repositorio
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
